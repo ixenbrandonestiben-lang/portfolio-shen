@@ -416,3 +416,36 @@ body.cursor-hidden * {
 @media (max-width: 900px) {
   .blueprint-media { height: 180px; }
 }
+
+/* ✨ Texto Variable Interactivo */
+.variable-text {
+  font-family: 'Manrope', sans-serif;
+  /* Peso inicial (se sobrescribirá por JS) */
+  font-variation-settings: 'wght' 400; 
+  font-size: clamp(24px, 4vw, 48px); /* Reemplaza el cálculo de windowWidth / 10.5 de forma nativa y responsiva */
+  line-height: 1.25;
+  font-weight: 400; /* Fallback para navegadores muy antiguos */
+  
+  /* Degradado premium usando el color del tema actual */
+  background: linear-gradient(90deg, var(--accent) 0%, #ffffff 50%, var(--accent) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  
+  /* Suaviza los cambios para que no se vea entrecortado */
+  transition: font-variation-settings 0.1s linear;
+  will-change: font-variation-settings;
+  cursor: default;
+}
+
+/* Animación sutil del brillo del degradado */
+@keyframes shimmer {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+.variable-text:hover {
+  animation: shimmer 3s linear infinite;
+}
