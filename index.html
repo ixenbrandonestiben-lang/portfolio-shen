@@ -51,18 +51,34 @@
 
   <main>
     <!-- Hero -->
-    <section class="chapter" id="inicio">
-      <div class="container">
-        <div class="section-tag"><i data-lucide="cpu" style="width:14px;height:14px"></i><span>Mecánica · Tecnología · Pasión</span></div>
-        <h1 class="title-glow hero-title gs-reveal">DEL TALLER<br/>AL <em>CÓDIGO.</em></h1>
-        <p class="text-lead gs-reveal">No soy un desarrollador común. Fusiono la <span class="zoom-word">precisión</span> del diagnóstico automotriz con la <span class="zoom-word">lógica</span> de la programación para crear soluciones reales.</p>
-        <div class="btn-row gs-reveal">
-          <a class="btn btn-primary" href="#proyectos"><span>Ver Proyectos</span><i data-lucide="book-open" style="width:16px;height:16px"></i></a>
-          <a class="btn btn-secondary" href="#sobre-mi"><span>Conóceme</span><i data-lucide="user" style="width:16px;height:16px"></i></a>
-        </div>
-      </div>
-    </section>
+    <!-- Hero Section -->
+<section class="chapter" id="inicio">
+  <div class="container">
+    <div class="section-tag">
+      <i data-lucide="cpu" style="width:14px;height:14px"></i>
+      <span>Mecánica · Tecnología · Pasión</span>
+    </div>
+    <h1 class="title-glow hero-title gs-reveal">
+      DEL TALLER<br/>AL <em>CÓDIGO.</em>
+    </h1>
+    
+    <!-- 🆕 Texto Variable Interactivo (Reemplaza al p.text-lead anterior) -->
+    <p class="variable-text gs-reveal" id="interactive-text">
+      No soy un desarrollador común. Fusiono la precisión del diagnóstico automotriz con la lógica de la programación para crear soluciones reales.
+    </p>
 
+    <div class="btn-row gs-reveal">
+      <a class="btn btn-primary" href="#proyectos">
+        <span>Ver Proyectos</span>
+        <i data-lucide="book-open" style="width:16px;height:16px"></i>
+      </a>
+      <a class="btn btn-secondary" href="#sobre-mi">
+        <span>Conóceme</span>
+        <i data-lucide="user" style="width:16px;height:16px"></i>
+      </a>
+    </div>
+  </div>
+</section>
     <!-- Sobre Mí -->
     <section class="chapter" id="sobre-mi">
       <div class="container">
@@ -327,5 +343,6 @@
   <script src="js/cube.js"></script>
   <script src="js/flipbook.js"></script>
   <script src="js/gravity.js"></script>
+  <script src="js/variables-text.js"></script>
 </body>
 </html>
