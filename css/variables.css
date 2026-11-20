@@ -9,10 +9,12 @@
   --accent: #e7a856;
   --accent-glow: rgba(231, 168, 86, 0.35);
   --accent-dark: rgba(231, 168, 86, 0.12);
+  --lime: #c4d384; /* 🆕 Nuevo color para detalles de la araña */
 }
 
-[data-theme="amber"] { --accent: #e7a856; --accent-glow: rgba(231, 168, 86, 0.4); --accent-dark: rgba(231, 168, 86, 0.14); }
-[data-theme="neon"] { --accent: #00ff9d; --accent-glow: rgba(0, 255, 157, 0.4); --accent-dark: rgba(0, 255, 157, 0.14); }
-[data-theme="cyan"] { --accent: #00e5ff; --accent-glow: rgba(0, 229, 255, 0.4); --accent-dark: rgba(0, 229, 255, 0.14); }
-[data-theme="crimson"] { --accent: #ff4d4d; --accent-glow: rgba(255, 77, 77, 0.4); --accent-dark: rgba(255, 77, 77, 0.14); }
-[data-theme="violet"] { --accent: #a855f7; --accent-glow: rgba(168, 85, 247, 0.45); --accent-dark: rgba(168, 85, 247, 0.15); }
+/* Actualizar los temas para que el lime también tenga variaciones sutiles si deseas, 
+   o dejarlo fijo como color de acento secundario biomecánico */
+[data-theme="neon"] { --lime: #00ff9d; }
+[data-theme="cyan"] { --lime: #00e5ff; }
+[data-theme="crimson"] { --lime: #ff4d4d; }
+[data-theme="violet"] { --lime: #a855f7; }
