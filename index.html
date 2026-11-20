@@ -1,0 +1,331 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <meta content="#090b0f" name="theme-color"/>
+  <meta name="description" content="Portafolio de Brandon Estiben Ixén Teleguario. Fusión de mecánica automotriz, lógica y programación.">
+  <title>Brandon Estiben | Mecánica · Tecnología · Pasión</title>
+  
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Manrope:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+  
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.577.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <link rel="stylesheet" href="css/main.css"/>
+</head>
+<body data-theme="amber">
+
+  <div aria-hidden="true" class="universe-bg">
+    <div class="stars-small"></div>
+    <div class="stars-medium"></div>
+    <div class="stars-large"></div>
+    <div class="nebula"></div>
+  </div>
+
+  <canvas aria-hidden="true" id="spider-canvas"></canvas>
+
+  <header class="site-header">
+    <a class="brand" href="#inicio">BE<span>IT.</span> / BRANDON ESTIBEN <span class="brand-badge">PORTFOLIO</span></a>
+    <div aria-label="Selector de temas" class="theme-bar">
+      <span>TEMA:</span>
+      <button class="theme-dot active" data-color="amber" style="background:#e7a856" title="Ámbar"></button>
+      <button class="theme-dot" data-color="neon" style="background:#00ff9d" title="Neón"></button>
+      <button class="theme-dot" data-color="cyan" style="background:#00e5ff" title="Cian"></button>
+      <button class="theme-dot" data-color="crimson" style="background:#ff4d4d" title="Carmesí"></button>
+      <button class="theme-dot" data-color="violet" style="background:#a855f7" title="Violeta"></button>
+    </div>
+    <nav class="desktop-nav">
+      <a href="#inicio">Inicio</a>
+      <a href="#sobre-mi">Sobre Mí</a>
+      <a href="#cubo">Stack 3D</a>
+      <a href="#proyectos">Proyectos</a>
+      <a href="#habilidades">Habilidades</a>
+      <a href="#fuera-codigo">Fuera del Código</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="chapter" id="inicio">
+      <div class="container">
+        <div class="section-tag"><i data-lucide="cpu" style="width:14px;height:14px"></i><span>Mecánica · Tecnología · Pasión</span></div>
+        <h1 class="title-glow hero-title gs-reveal">DEL TALLER<br/>AL <em>CÓDIGO.</em></h1>
+        <p class="text-lead gs-reveal">No soy un desarrollador común. Fusiono la <span class="zoom-word">precisión</span> del diagnóstico automotriz con la <span class="zoom-word">lógica</span> de la programación para crear soluciones reales.</p>
+        <div class="btn-row gs-reveal">
+          <a class="btn btn-primary" href="#proyectos"><span>Ver Proyectos</span><i data-lucide="book-open" style="width:16px;height:16px"></i></a>
+          <a class="btn btn-secondary" href="#sobre-mi"><span>Conóceme</span><i data-lucide="user" style="width:16px;height:16px"></i></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sobre Mí -->
+    <section class="chapter" id="sobre-mi">
+      <div class="container">
+        <div class="section-tag"><i data-lucide="user-circle" style="width:14px;height:14px"></i><span>Perfil del Desarrollador</span></div>
+        <h2 class="title-glow gs-reveal" style="font-size:clamp(32px, 5vw, 58px);">Precisión de <em>Taller.</em></h2>
+        <div class="cube-section-grid gs-reveal" style="margin-top: 40px;">
+          <div>
+            <p class="text-lead" style="margin-bottom: 24px;">Mi base no nació en un entorno tradicional de programación, sino en el trabajo práctico: <span class="zoom-word">reparación</span>, <span class="zoom-word">precisión</span> y el entendimiento de cómo funcionan las cosas por dentro.</p>
+            <p style="color: var(--text-muted); line-height: 1.8; margin-bottom: 24px;">Esa experiencia me hizo pensar de manera analítica. Cuando me adentro en la programación, veo una herramienta para diagnosticar causas raíz y automatizar procesos. Cada línea de código debe tener un propósito.</p>
+            <div class="stats-row">
+              <div class="stat-card"><div class="val">100%</div><div class="lbl">ENFOQUE EN CAUSA RAÍZ</div></div>
+              <div class="stat-card"><div class="val">∞</div><div class="lbl">APRENDIZAJE CONTINUO</div></div>
+            </div>
+          </div>
+          <div class="ide-container">
+            <div class="ide-header">
+              <div class="ide-dots"><div class="ide-dot red"></div><div class="ide-dot yellow"></div><div class="ide-dot green"></div></div>
+              <div class="ide-tabs">
+                <button class="ide-tab active" data-lang="filosofia">filosofia.txt</button>
+                <button class="ide-tab" data-lang="objetivo">objetivo.md</button>
+              </div>
+            </div>
+            <div class="ide-body">
+              <div class="ide-lines">1<br>2<br>3<br>4<br>5<br>6</div>
+              <div class="ide-code"><span id="ide-target"></span><span class="cursor-blink"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cubo 3D -->
+    <section class="chapter" id="cubo">
+      <div class="container">
+        <div class="cube-section-grid">
+          <div>
+            <div class="section-tag"><i data-lucide="box" style="width:14px;height:14px"></i><span>Navegación Tridimensional</span></div>
+            <h2 class="title-glow gs-reveal" style="font-size:clamp(32px, 5vw, 58px);">Cubo de <em>Tecnologías.</em></h2>
+            <p class="text-lead gs-reveal" style="margin-top:16px;">Arrastra para rotar el cubo. Haz <span class="zoom-word">clic</span> en cualquier cara para abrir su ficha técnica.</p>
+            <div class="mono" style="margin-top:24px; color:var(--text-dim);">ROTACIÓN: <span id="cube-coords" style="color:var(--accent);">X: -20° | Y: 25°</span></div>
+          </div>
+          <div class="cube-viewport">
+            <div class="cube-wrap" id="cube-element">
+              <div class="cube-face front" data-tech="python"><i data-lucide="binary"></i><span>PYTHON</span></div>
+              <div class="cube-face back" data-tech="javascript"><i data-lucide="file-code"></i><span>JAVASCRIPT</span></div>
+              <div class="cube-face right" data-tech="htmlcss"><i data-lucide="layout"></i><span>HTML/CSS</span></div>
+              <div class="cube-face left" data-tech="sql"><i data-lucide="database"></i><span>MYSQL</span></div>
+              <div class="cube-face top" data-tech="mecanica"><i data-lucide="wrench"></i><span>MECÁNICA</span></div>
+              <div class="cube-face bottom" data-tech="logica"><i data-lucide="brain"></i><span>LÓGICA</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Proyectos -->
+    <!-- Proyectos (Renderizado dinámico) -->
+<section class="chapter" id="proyectos">
+  <div class="container">
+    <div class="section-tag">
+      <i data-lucide="layers" style="width:14px;height:14px"></i>
+      <span>Soluciones Prácticas</span>
+    </div>
+    <h2 class="title-glow gs-reveal" style="font-size:clamp(32px, 5vw, 60px);">
+      Libro de <em>Proyectos.</em>
+    </h2>
+    <p class="text-lead gs-reveal">
+      Cada proyecto representa una forma de aplicar la lógica y la disciplina para resolver problemas reales. Haz clic en una portada para verla en detalle.
+    </p>
+    <div class="flipbook-container gs-reveal">
+      <div class="flipbook">
+        <!-- 🆕 Los spreads se generan desde JS -->
+        <div id="book-spreads"></div>
+      </div>
+      <div class="book-nav">
+        <button class="btn btn-secondary" id="book-prev">
+          <i data-lucide="chevron-left" style="width:16px;height:16px"></i> Anterior
+        </button>
+        <span class="page-indicator" id="book-indicator">PÁGINAS 1 - 2 // 4</span>
+        <button class="btn btn-secondary" id="book-next">
+          Siguiente <i data-lucide="chevron-right" style="width:16px;height:16px"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- Habilidades (Solo Blandas) -->
+<section class="chapter" id="habilidades">
+  <div class="container">
+    <div class="section-tag">
+      <i data-lucide="heart" style="width:14px;height:14px"></i>
+      <span>Mentalidad y Actitud</span>
+    </div>
+    <h2 class="title-glow gs-reveal" style="font-size:clamp(32px, 5vw, 60px);">
+      Caja de <em>Herramientas.</em>
+    </h2>
+    <p class="text-lead gs-reveal">
+      Las habilidades técnicas se aprenden, pero la mentalidad se forja. Estas son las cualidades que me acompañan en cualquier proyecto, venga del taller o del código.
+    </p>
+    <div class="skill-grid gs-reveal">
+      <div class="skill-box">
+        <h3 style="font-family:'Syne'; font-size:18px; margin-bottom:20px; color:#fff;">Resolución y Disciplina</h3>
+        <div class="skill-item">
+          <div class="skill-meta"><span>Resolución de Problemas (Causa Raíz)</span><span>Avanzado</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="95%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-meta"><span>Disciplina y Constancia</span><span>Avanzado</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="92%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-meta"><span>Persistencia ante Obstáculos</span><span>Avanzado</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="90%"></div></div>
+        </div>
+      </div>
+      <div class="skill-box">
+        <h3 style="font-family:'Syne'; font-size:18px; margin-bottom:20px; color:#fff;">Actitud y Colaboración</h3>
+        <div class="skill-item">
+          <div class="skill-meta"><span>Proactividad y Autogestión</span><span>Avanzado</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="88%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-meta"><span>Trabajo en Equipo</span><span>Avanzado</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="85%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-meta"><span>Comunicación Efectiva</span><span>En desarrollo</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="75%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-meta"><span>Adaptabilidad y Aprendizaje Rápido</span><span>Avanzado</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="87%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+    <!-- Fuera del Código + Centro de Gravedad -->
+<section class="chapter" id="fuera-codigo">
+  <div class="container">
+    <div class="section-tag">
+      <i data-lucide="heart" style="width:14px;height:14px"></i>
+      <span>Deportes · Pasiones · Crecimiento</span>
+    </div>
+    <h2 class="title-glow gs-reveal" style="font-size:clamp(32px, 5vw, 60px);">
+      Fuera del <em>Código.</em>
+    </h2>
+    <p class="text-lead gs-reveal">
+      Detrás de cada línea de código hay una persona. Estas actividades me enseñan disciplina, resiliencia y me recargan para enfrentar nuevos retos.
+    </p>
+
+    <!-- 🌌 Centro de Gravedad Interactivo -->
+    <div class="gravity-lab gs-reveal" style="margin-top: 50px;">
+      <div class="gravity-header">
+        <div class="section-tag" style="margin-bottom: 0;">
+          <i data-lucide="atom" style="width:14px;height:14px"></i>
+          <span>Laboratorio de Gravedad</span>
+        </div>
+        <div class="gravity-controls">
+          <button class="gravity-btn" id="btn-drop">
+            <i data-lucide="image-plus" style="width:14px;height:14px"></i>
+            <span>Soltar Img</span>
+          </button>
+          <button class="gravity-btn" id="btn-gravity">
+            <i data-lucide="arrow-down" style="width:14px;height:14px"></i>
+            <span id="gravity-label">Gravedad: Normal</span>
+          </button>
+          <button class="gravity-btn gravity-btn-danger" id="btn-delete">
+            <i data-lucide="trash-2" style="width:14px;height:14px"></i>
+            <span>Eliminar</span>
+          </button>
+        </div>
+      </div>
+      <div class="gravity-canvas-wrapper">
+        <canvas id="gravity-canvas"></canvas>
+        <div class="gravity-info">
+          <span class="mono" style="color:var(--text-dim); font-size:11px;">
+            IMÁGENES: <b id="img-count" style="color:var(--accent);">0</b> 
+            &nbsp;|&nbsp; ESTADO: <b id="gravity-state" style="color:var(--accent);">NORMAL</b>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tarjetas de pasiones (se mantienen debajo) -->
+    <div class="stats-row gs-reveal" style="margin-top: 40px;">
+      <div class="stat-card" style="min-width: 220px;">
+        <i data-lucide="trophy" style="color:var(--accent); margin-bottom:12px;"></i>
+        <div class="val" style="font-size:20px;">Deportes</div>
+        <div class="lbl" style="margin-top:8px; line-height:1.4;">Fútbol sala, Atletismo y Calistenia.</div>
+      </div>
+      <div class="stat-card" style="min-width: 220px;">
+        <i data-lucide="zap" style="color:var(--accent); margin-bottom:12px;"></i>
+        <div class="val" style="font-size:20px;">Pasiones</div>
+        <div class="lbl" style="margin-top:8px; line-height:1.4;">Autos, motos, naturaleza y arte.</div>
+      </div>
+      <div class="stat-card" style="min-width: 220px;">
+        <i data-lucide="brain" style="color:var(--accent); margin-bottom:12px;"></i>
+        <div class="val" style="font-size:20px;">Crecimiento</div>
+        <div class="lbl" style="margin-top:8px; line-height:1.4;">Autoconocimiento y comunicación.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- Contacto -->
+    <section class="chapter" id="contacto">
+      <div class="container">
+        <div class="section-tag"><i data-lucide="mail" style="width:14px;height:14px"></i><span>Canal Directo</span></div>
+        <h2 class="title-glow gs-reveal" style="font-size:clamp(32px, 5vw, 64px);">¿Tienes un desafío? <br/>Construyamos <em>una solución.</em></h2>
+        <p class="text-lead gs-reveal" style="margin:20px 0 32px;">Disponible para proyectos de desarrollo, automatización y consultoría técnica. Hablemos.</p>
+        <div class="stats-row gs-reveal" style="margin-bottom: 32px;">
+          <div class="stat-card" style="display:flex; align-items:center; gap:12px;"><i data-lucide="map-pin" style="color:var(--accent);"></i><div><div class="lbl">UBICACIÓN</div><div style="color:#fff; font-size:14px;">Villa de los Niños, Zona 6, Ciudad de Guatemala</div></div></div>
+          <div class="stat-card" style="display:flex; align-items:center; gap:12px;"><i data-lucide="mail" style="color:var(--accent);"></i><div><div class="lbl">CORREO</div><div style="color:#fff; font-size:14px;">tu@correo.com</div></div></div>
+        </div>
+        <div class="btn-row gs-reveal">
+          <a class="btn btn-primary" href="mailto:tu@correo.com"><span>Enviar Correo</span><i data-lucide="send" style="width:16px;height:16px"></i></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal del Cubo -->
+  <div aria-hidden="true" class="modal-overlay" id="tech-modal">
+    <div class="modal-card">
+      <button aria-label="Cerrar modal" class="modal-close" id="modal-close-btn"><i data-lucide="x" style="width:18px;height:18px"></i></button>
+      <div class="section-tag" id="modal-badge">TECNOLOGÍA</div>
+      <h3 id="modal-title" style="font-family:'Syne'; font-size:28px; margin:10px 0; color:#fff;"></h3>
+      <p id="modal-desc" style="color:var(--text-muted); font-size:14px; line-height:1.7; margin:14px 0 20px;"></p>
+      <div class="mono" style="background:rgba(255,255,255,0.03); border:1px solid var(--border); padding:12px; border-radius:6px;">
+        <span id="modal-meta" style="font-size:11px; color:var(--accent);"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🖼️ Modal de Imagen (Lightbox) -->
+<div aria-hidden="true" class="image-modal-overlay" id="image-modal">
+  <div class="image-modal-content">
+    <button aria-label="Cerrar imagen" class="image-modal-close" id="modal-close">
+      <i data-lucide="x" style="width:20px;height:20px"></i>
+    </button>
+    <div class="image-modal-badge" id="modal-title">Imagen</div>
+    <img id="modal-image" src="" alt="Imagen ampliada" class="image-modal-img"/>
+    <div class="image-modal-hint">
+      <i data-lucide="mouse-pointer-click" style="width:14px;height:14px"></i>
+      <span>Haz clic fuera o presiona ESC para cerrar</span>
+    </div>
+  </div>
+</div>
+
+  <footer class="site-footer">
+    <span>© <span id="current-year"></span> BRANDON ESTIBEN IXÉN TELEGUARIO</span>
+    <span>PRECISIÓN MECÁNICA + ARQUITECTURA DE SOFTWARE</span>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/ide.js"></script>
+  <script src="js/modal.js"></script>
+  <script src="js/spider.js"></script>
+  <script src="js/cube.js"></script>
+  <script src="js/flipbook.js"></script>
+  <script src="js/gravity.js"></script>
+</body>
+</html>
