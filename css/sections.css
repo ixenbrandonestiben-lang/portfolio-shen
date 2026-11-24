@@ -449,3 +449,124 @@ body.cursor-hidden * {
 .variable-text:hover {
   animation: shimmer 3s linear infinite;
 }
+
+/* 🕷️ Araña Biomecánica (Pantalla Completa Real) */
+#scrapling-spider-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* Se ajustará al scrollHeight en JS */
+  z-index: 90;
+  pointer-events: none; /* Permite hacer clic a través del canvas */
+}
+
+/* --- Estilos para Navegación Móvil --- */
+.mobile-nav-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--border);
+  color: #fff;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 110;
+}
+
+.mobile-nav {
+  position: fixed;
+  top: 72px;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 72px);
+  background: rgba(9, 11, 15, 0.98);
+  backdrop-filter: blur(15px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  z-index: 105;
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mobile-nav.open {
+  transform: translateX(0);
+}
+
+.mobile-nav a {
+  color: #fff;
+  font-size: 20px;
+  font-family: 'Syne', sans-serif;
+  text-decoration: none;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 900px) {
+  .desktop-nav { display: none; }
+  .mobile-nav-toggle { display: block; }
+  .theme-bar span { display: none; }
+  .brand-badge { display: none; }
+  
+  .chapter {
+    padding: 100px 20px 60px;
+    min-height: auto;
+  }
+
+  .stat-card {
+    min-width: 100%; /* Las tarjetas ocupan todo el ancho en móviles pequeños */
+  }
+
+  .btn-row {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .site-header { height: 64px; padding: 0 12px; }
+  .brand { font-size: 12px; gap: 6px; }
+  .theme-bar { gap: 5px; padding: 4px 6px; }
+  .theme-dot { width: 15px; height: 15px; }
+  .mobile-nav { top: 64px; height: calc(100vh - 64px); gap: 24px; }
+  .chapter { padding: 88px 16px 48px; }
+  .hero-title { font-size: clamp(42px, 15vw, 72px); }
+  .text-lead { font-size: 16px; }
+  .stats-row { width: 100%; }
+  .stat-card { width: 100%; min-width: 0; }
+  .ide-body { grid-template-columns: 38px 1fr; font-size: 11px; }
+  .ide-code { padding-right: 12px; }
+  .cube-viewport { height: 300px; }
+  .cube-wrap, .cube-face { width: 150px; height: 150px; }
+  .cube-face.front  { transform: translateZ(75px); }
+  .cube-face.back   { transform: rotateY(180deg) translateZ(75px); }
+  .cube-face.right  { transform: rotateY(90deg) translateZ(75px); }
+  .cube-face.left   { transform: rotateY(-90deg) translateZ(75px); }
+  .cube-face.top    { transform: rotateX(90deg) translateZ(75px); }
+  .cube-face.bottom { transform: rotateX(-90deg) translateZ(75px); }
+  .flipbook { min-height: 0; }
+  .book-spread { min-height: 0; }
+  .book-page { padding: 18px 12px; }
+  .blueprint-card { padding: 16px; }
+  .blueprint-card h3 { font-size: 18px !important; }
+  .blueprint-media { height: 150px; }
+  .book-nav { width: 100%; gap: 8px; }
+  .book-nav .btn { flex: 1; padding: 12px 8px; font-size: 10px; }
+  .page-indicator { text-align: center; min-width: 92px; }
+  .skill-grid { gap: 16px; }
+  .skill-box { padding: 18px 14px; }
+  .skill-meta { gap: 12px; align-items: flex-start; }
+  .gravity-header { padding: 16px; }
+  .gravity-controls { width: 100%; }
+  .gravity-controls .gravity-btn { flex: 1 1 140px; justify-content: center; }
+  .gravity-canvas-wrapper { height: 300px; }
+  .site-footer { flex-direction: column; padding: 24px 16px; }
+}

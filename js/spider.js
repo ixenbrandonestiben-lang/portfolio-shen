@@ -1,242 +1,227 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const spiderCanvas = document.getElementById('spider-canvas');
-  const ctx = spiderCanvas.getContext('2d');
-  
-  let width = spiderCanvas.width = window.innerWidth;
-  let height = spiderCanvas.height = window.innerHeight;
+  const spiderCanvas = document.getElementById('scrapling-spider-canvas');
+  if (!spiderCanvas) return;
 
-  window.addEventListener('resize', () => {
-    width = spiderCanvas.width = window.innerWidth;
-    height = spiderCanvas.height = window.innerHeight;
-  });
+  const sCtx = spiderCanvas.getContext('2d');
+  let sW, sH;
 
-  // Estados de la araña
-  const STATE = {
-    WANDER: 'wander',
-    CHASE: 'chase',
-    EAT: 'eat',
-    LEAVE: 'leave',
-    WAIT: 'wait'
-  };
+  // 📏 Ajustar canvas a la altura TOTAL del documento (no solo el viewport)
+  function resizeCanvas() {
+    sW = spiderCanvas.width = window.innerWidth;
+    sH = spiderCanvas.height = Math.max(
+      document.body.scrollHeight, 
+      document.documentElement.scrollHeight, 
+      window.innerHeight
+    );
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+  window.addEventListener('scroll', resizeCanvas); // Por si el contenido cambia dinámicamente
 
-  let currentState = STATE.WANDER;
-  let mouse = { x: width / 2, y: height / 2 };
-  let target = { x: Math.random() * width, y: Math.random() * height };
-  
-  // Configuración de la araña (Más grande)
+  // 🕷️ Estado principal de la araña (Coordenadas absolutas de la página)
   const spider = {
-    x: width / 2,
-    y: height / 2,
-    size: 28, // Tamaño aumentado
-    speed: 2,
-    angle: 0
+    x: sW * 0.5,
+    y: window.innerHeight * 0.5, // Empieza en el viewport inicial
+    angle: Math.PI * 0.8,
+    speed: 0,
+    targetX: sW * 0.5,
+    targetY: window.innerHeight * 0.8,
+    wanderTimer: 0,
+    legs: []
   };
 
-  let chaseStartTime = Date.now();
-  let eatTimer = null;
+  // Configuración de 8 patas con paso alternado (tripod gait)
+  const legConfigs = [
+    { side: -1, baseAngle: -0.55, reach: 58, group: 0 },
+    { side:  1, baseAngle:  0.55, reach: 58, group: 1 },
+    { side: -1, baseAngle: -1.15, reach: 66, group: 1 },
+    { side:  1, baseAngle:  1.15, reach: 66, group: 0 },
+    { side: -1, baseAngle: -1.85, reach: 66, group: 0 },
+    { side:  1, baseAngle:  1.85, reach: 66, group: 1 },
+    { side: -1, baseAngle: -2.45, reach: 60, group: 1 },
+    { side:  1, baseAngle:  2.45, reach: 60, group: 0 }
+  ];
 
-  // Rastrear el mouse
-  window.addEventListener('mousemove', (e) => {
-    if (currentState !== STATE.WAIT && currentState !== STATE.EAT) {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-    }
+  // Inicializar patas
+  legConfigs.forEach((cfg) => {
+    const worldAngle = spider.angle + cfg.baseAngle;
+    const fx = spider.x + Math.cos(worldAngle) * cfg.reach;
+    const fy = spider.y + Math.sin(worldAngle) * cfg.reach;
+    spider.legs.push({
+      ...cfg,
+      footX: fx, footY: fy, startX: fx, startY: fy,
+      goalX: fx, goalY: fy, stepProgress: 1, stepping: false
+    });
   });
 
-  // Iniciar persecución después de 10 segundos
-  setTimeout(() => {
-    if (currentState === STATE.WANDER) {
-      currentState = STATE.CHASE;
-    }
-  }, 10000);
+  // 🖱️ Hacer clic en cualquier espacio libre atrae a la araña
+  window.addEventListener('pointerdown', (e) => {
+    // Ignorar clics en elementos interactivos para no romper la UX
+    if (e.target.closest('button, a, input, .ide-tab, .cube-face, .book-nav, .gravity-btn')) return;
+    
+    // Convertir coordenadas del viewport a coordenadas absolutas de la página
+    spider.targetX = e.clientX;
+    spider.targetY = e.clientY + window.scrollY; 
+    spider.wanderTimer = 260;
+  });
 
-  // Función para obtener un punto aleatorio en los bordes (para huir)
-  function getRandomEdgePoint() {
-    const edge = Math.floor(Math.random() * 4);
-    switch(edge) {
-      case 0: return { x: Math.random() * width, y: -50 }; // Arriba
-      case 1: return { x: width + 50, y: Math.random() * height }; // Derecha
-      case 2: return { x: Math.random() * width, y: height + 50 }; // Abajo
-      case 3: return { x: -50, y: Math.random() * height }; // Izquierda
-    }
-  }
+  // 🔄 Bucle de animación
+  function updateAndDrawSpider() {
+    requestAnimationFrame(updateAndDrawSpider);
 
-  // Función para obtener un punto aleatorio dentro de la pantalla (deambular)
-  function getRandomWanderPoint() {
-    return {
-      x: 100 + Math.random() * (width - 200),
-      y: 100 + Math.random() * (height - 200)
-    };
-  }
+    sCtx.clearRect(0, 0, sW, sH);
 
-  function updateSpider() {
-    // Obtener color dinámico del tema actual
-    const accentColor = getComputedStyle(document.body).getPropertyValue('--accent').trim() || '#e7a856';
+    // TRUCO PROFESIONAL: Trasladar el contexto para que el dibujo coincida con el scroll
+    sCtx.save();
+    sCtx.translate(0, -window.scrollY);
 
-    let dx, dy, distance;
+    // Elegir nuevo destino autónomo periódicamente
+    spider.wanderTimer--;
+    const dx = spider.targetX - spider.x;
+    const dy = spider.targetY - spider.y;
+    const dist = Math.hypot(dx, dy);
 
-    switch (currentState) {
-      case STATE.WANDER:
-        dx = target.x - spider.x;
-        dy = target.y - spider.y;
-        distance = Math.hypot(dx, dy);
-        
-        if (distance < 10) {
-          target = getRandomWanderPoint();
-        } else {
-          spider.x += (dx / distance) * (spider.speed * 0.5);
-          spider.y += (dy / distance) * (spider.speed * 0.5);
-          spider.angle = Math.atan2(dy, dx);
-        }
-        break;
-
-      case STATE.CHASE:
-        dx = mouse.x - spider.x;
-        dy = mouse.y - spider.y;
-        distance = Math.hypot(dx, dy);
-
-        // Si atrapa el cursor (distancia menor a 35px)
-        if (distance < 35) {
-          currentState = STATE.EAT;
-          document.body.classList.add('cursor-hidden'); // ¡Come el cursor!
-          
-          // Programar la huida y reaparición
-          target = getRandomEdgePoint();
-          currentState = STATE.LEAVE;
-          
-          eatTimer = setTimeout(() => {
-            document.body.classList.remove('cursor-hidden'); // Reaparece el cursor
-            currentState = STATE.WANDER;
-            target = getRandomWanderPoint();
-            // Reiniciar el ciclo de 10 segundos para la próxima persecución
-            setTimeout(() => {
-              if (currentState === STATE.WANDER) currentState = STATE.CHASE;
-            }, 10000);
-          }, 5000); // 5 segundos desaparecido
-        } else {
-          spider.x += (dx / distance) * (spider.speed * 1.5); // Más rápido al perseguir
-          spider.y += (dy / distance) * (spider.speed * 1.5);
-          spider.angle = Math.atan2(dy, dx);
-        }
-        break;
-
-      case STATE.LEAVE:
-        dx = target.x - spider.x;
-        dy = target.y - spider.y;
-        distance = Math.hypot(dx, dy);
-        
-        if (distance < 10) {
-          // Llegó al borde, espera allí hasta que el timer de 5s la devuelva a WANDER
-          currentState = STATE.WAIT;
-        } else {
-          spider.x += (dx / distance) * (spider.speed * 2); // Huye muy rápido
-          spider.y += (dy / distance) * (spider.speed * 2);
-          spider.angle = Math.atan2(dy, dx);
-        }
-        break;
-        
-      case STATE.WAIT:
-        // Se queda quieta en el borde hasta que el timer la reactive
-        break;
+    if (dist < 28 || spider.wanderTimer <= 0) {
+      // Limitar el deambular a los límites del documento
+      const maxY = sH - 220;
+      spider.targetX = 90 + Math.random() * Math.max(200, sW - 180);
+      spider.targetY = 110 + Math.random() * Math.max(200, maxY);
+      spider.wanderTimer = 180 + Math.floor(Math.random() * 180);
     }
 
-    // Interacción con palabras clave (Zoom Words)
+    // Girar suavemente hacia el objetivo y avanzar
+    const desiredAngle = Math.atan2(dy, dx);
+    let angleDiff = desiredAngle - spider.angle;
+    while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
+    while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
+
+    spider.angle += angleDiff * 0.055;
+    const targetSpeed = dist > 24 ? Math.min(2.35, dist * 0.025) : 0;
+    spider.speed += (targetSpeed - spider.speed) * 0.08;
+
+    spider.x += Math.cos(spider.angle) * spider.speed;
+    spider.y += Math.sin(spider.angle) * spider.speed;
+
+    // Obtener colores dinámicos del tema
+    const styles = getComputedStyle(document.documentElement);
+    const accentColor = styles.getPropertyValue('--accent').trim() || '#e7a856';
+    const limeColor = styles.getPropertyValue('--lime').trim() || '#c4d384';
+
+    const anyGroup0Stepping = spider.legs.some((l) => l.group === 0 && l.stepping);
+    const anyGroup1Stepping = spider.legs.some((l) => l.group === 1 && l.stepping);
+
+    // Actualizar y dibujar patas
+    spider.legs.forEach((leg) => {
+      const idealAngle = spider.angle + leg.baseAngle;
+      const idealX = spider.x + Math.cos(idealAngle) * leg.reach + Math.cos(spider.angle) * (spider.speed * 10);
+      const idealY = spider.y + Math.sin(idealAngle) * leg.reach + Math.sin(spider.angle) * (spider.speed * 10);
+
+      const footError = Math.hypot(idealX - leg.footX, idealY - leg.footY);
+      const otherGroupBusy = leg.group === 0 ? anyGroup1Stepping : anyGroup0Stepping;
+
+      if (!leg.stepping && footError > 30 && !otherGroupBusy) {
+        leg.stepping = true;
+        leg.stepProgress = 0;
+        leg.startX = leg.footX;
+        leg.startY = leg.footY;
+        leg.goalX = idealX;
+        leg.goalY = idealY;
+      }
+
+      let lift = 0;
+      if (leg.stepping) {
+        leg.stepProgress += 0.14;
+        if (leg.stepProgress >= 1) {
+          leg.stepProgress = 1;
+          leg.stepping = false;
+        }
+        const t = leg.stepProgress;
+        leg.footX = leg.startX + (leg.goalX - leg.startX) * t;
+        leg.footY = leg.startY + (leg.goalY - leg.startY) * t;
+        lift = Math.sin(t * Math.PI) * 10; // Arco de elevación
+      }
+
+      const hipX = spider.x + Math.cos(spider.angle + leg.baseAngle * 0.7) * 11;
+      const hipY = spider.y + Math.sin(spider.angle + leg.baseAngle * 0.7) * 11;
+      const midX = (hipX + leg.footX) * 0.5 + Math.cos(idealAngle) * 10;
+      const midY = (hipY + leg.footY) * 0.5 + Math.sin(idealAngle) * 10 - 12 - lift;
+
+      sCtx.beginPath();
+      sCtx.moveTo(hipX, hipY);
+      sCtx.lineTo(midX, midY);
+      sCtx.lineTo(leg.footX, leg.footY - lift * 0.3);
+      sCtx.strokeStyle = leg.stepping ? accentColor : 'rgba(241, 240, 232, 0.72)';
+      sCtx.lineWidth = 2.1;
+      sCtx.lineCap = 'round';
+      sCtx.lineJoin = 'round';
+      sCtx.stroke();
+
+      sCtx.fillStyle = accentColor;
+      sCtx.beginPath();
+      sCtx.arc(midX, midY, 2.3, 0, Math.PI * 2);
+      sCtx.fill();
+
+      sCtx.fillStyle = limeColor;
+      sCtx.beginPath();
+      sCtx.arc(leg.footX, leg.footY, 2, 0, Math.PI * 2);
+      sCtx.fill();
+    });
+
+    // Dibujar cuerpo (Cefalotórax y Abdomen)
+    sCtx.save();
+    sCtx.translate(spider.x, spider.y);
+    sCtx.rotate(spider.angle);
+
+    // Abdomen
+    sCtx.fillStyle = '#181b17';
+    sCtx.strokeStyle = accentColor;
+    sCtx.lineWidth = 2;
+    sCtx.beginPath();
+    sCtx.ellipse(-13, 0, 12, 9, 0, 0, Math.PI * 2);
+    sCtx.fill();
+    sCtx.stroke();
+
+    // Núcleo luminoso
+    sCtx.fillStyle = limeColor;
+    sCtx.beginPath();
+    sCtx.arc(-13, 0, 3.5, 0, Math.PI * 2);
+    sCtx.fill();
+
+    // Cabeza
+    sCtx.fillStyle = '#10120f';
+    sCtx.strokeStyle = '#f1f0e8';
+    sCtx.lineWidth = 1.8;
+    sCtx.beginPath();
+    sCtx.ellipse(4, 0, 9, 7, 0, 0, Math.PI * 2);
+    sCtx.fill();
+    sCtx.stroke();
+
+    // Sensores ópticos
+    sCtx.fillStyle = accentColor;
+    sCtx.beginPath();
+    sCtx.arc(10, -3, 2, 0, Math.PI * 2);
+    sCtx.arc(10, 3, 2, 0, Math.PI * 2);
+    sCtx.fill();
+
+    sCtx.restore(); // Fin del dibujo del cuerpo
+    sCtx.restore(); // Fin del translate del scroll
+
+    // 🔍 Interacción con Zoom Words (Adaptado a coordenadas absolutas)
     const zoomWords = document.querySelectorAll('.zoom-word');
     zoomWords.forEach(word => {
       const rect = word.getBoundingClientRect();
+      // Convertir posición del viewport a absoluta
       const wordCenterX = rect.left + rect.width / 2;
-      const wordCenterY = rect.top + rect.height / 2;
-      const distToWord = Math.hypot(spider.x - wordCenterX, spider.y - wordCenterY);
+      const wordCenterY = rect.top + window.scrollY + rect.height / 2;
       
-      // Si la araña está cerca (120px), resalta la palabra
+      const distToWord = Math.hypot(spider.x - wordCenterX, spider.y - wordCenterY);
       if (distToWord < 120) {
         word.classList.add('active-zoom');
       } else {
         word.classList.remove('active-zoom');
       }
     });
-
-    return accentColor;
   }
 
-  function drawSpider(accentColor) {
-    ctx.clearRect(0, 0, width, height);
-
-    ctx.save();
-    ctx.translate(spider.x, spider.y);
-    ctx.rotate(spider.angle);
-
-    // 1. Hilo de telaraña (solo si está arriba o moviéndose)
-    if (spider.y > 50) {
-      ctx.beginPath();
-      ctx.moveTo(0, -spider.y); // Desde arriba de la pantalla
-      ctx.lineTo(0, -spider.size);
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-      ctx.lineWidth = 1;
-      ctx.stroke();
-    }
-
-    // 2. Cuerpo de la araña (con color del tema y transparencia)
-    ctx.beginPath();
-    ctx.arc(0, 0, spider.size * 0.5, 0, Math.PI * 2);
-    ctx.fillStyle = accentColor + '30'; // 30% de opacidad en hex
-    ctx.fill();
-    ctx.strokeStyle = accentColor;
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // Ojos brillantes (mecánicos)
-    ctx.fillStyle = '#ffffff';
-    ctx.beginPath(); ctx.arc(spider.size * 0.2, -spider.size * 0.15, 3, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.arc(spider.size * 0.2, spider.size * 0.15, 3, 0, Math.PI * 2); ctx.fill();
-
-    // 3. Patas articuladas (8 patas, más grandes y mecánicas)
-    const time = Date.now() * 0.008;
-    for (let i = 0; i < 8; i++) {
-      const side = i < 4 ? -1 : 1; // 4 patas izquierdas, 4 derechas
-      const legIndex = i % 4;
-      
-      // Ángulo base de cada pata
-      const baseAngle = (legIndex - 1.5) * 0.4;
-      // Movimiento de caminata (senoide)
-      const walkOffset = Math.sin(time + legIndex) * 8;
-      
-      ctx.beginPath();
-      ctx.moveTo(side * (spider.size * 0.3), 0); // Unión al cuerpo
-      
-      // Primera articulación
-      const joint1X = side * (spider.size * 0.8) + walkOffset;
-      const joint1Y = (baseAngle * spider.size * 1.2);
-      ctx.lineTo(joint1X, joint1Y);
-      
-      // Segunda articulación (punta)
-      const joint2X = side * (spider.size * 1.4) + (walkOffset * 1.5);
-      const joint2Y = (baseAngle * spider.size * 1.8) + (side * 5);
-      ctx.lineTo(joint2X, joint2Y);
-      
-      ctx.strokeStyle = accentColor;
-      ctx.lineWidth = 2.5;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      ctx.stroke();
-
-      // Puntas de las patas (pequeños círculos)
-      ctx.beginPath();
-      ctx.arc(joint2X, joint2Y, 2, 0, Math.PI * 2);
-      ctx.fillStyle = '#ffffff';
-      ctx.fill();
-    }
-
-    ctx.restore();
-    requestAnimationFrame(() => {
-      const color = updateSpider();
-      drawSpider(color);
-    });
-  }
-
-  // Iniciar ciclo de animación
-  requestAnimationFrame(() => {
-    const color = getComputedStyle(document.body).getPropertyValue('--accent').trim() || '#e7a856';
-    drawSpider(color);
-  });
+  updateAndDrawSpider();
 });

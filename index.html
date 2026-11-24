@@ -26,7 +26,7 @@
     <div class="nebula"></div>
   </div>
 
-  <canvas aria-hidden="true" id="spider-canvas"></canvas>
+  <canvas aria-hidden="true" id="scrapling-spider-canvas"></canvas>
 
   <header class="site-header">
     <a class="brand" href="#inicio">BE<span>IT.</span> / BRANDON ESTIBEN <span class="brand-badge">PORTFOLIO</span></a>
@@ -39,6 +39,19 @@
       <button class="theme-dot" data-color="violet" style="background:#a855f7" title="Violeta"></button>
     </div>
     <nav class="desktop-nav">
+      <a href="#inicio">Inicio</a>
+      <a href="#sobre-mi">Sobre Mí</a>
+      <a href="#cubo">Stack 3D</a>
+      <a href="#proyectos">Proyectos</a>
+      <a href="#habilidades">Habilidades</a>
+      <a href="#fuera-codigo">Fuera del Código</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+
+    <button aria-label="Abrir menú" aria-controls="mobile-navigation" aria-expanded="false" class="mobile-nav-toggle">
+      <i data-lucide="menu"></i>
+    </button>
+    <nav class="mobile-nav" id="mobile-navigation">
       <a href="#inicio">Inicio</a>
       <a href="#sobre-mi">Sobre Mí</a>
       <a href="#cubo">Stack 3D</a>
@@ -294,11 +307,11 @@
         <div class="stats-row gs-reveal" style="margin-bottom: 32px;">
           <div class="stat-card" style="display:flex; align-items:center; gap:12px;"><i data-lucide="map-pin" style="color:var(--accent);"></i><div><div class="lbl">UBICACIÓN</div><div style="color:#fff; font-size:14px;">Villa de los Niños, Zona 6, Ciudad de Guatemala</div></div></div>
           <div class="stat-card" style="display:flex; align-items:center; gap:12px;"><i data-lucide="mail" style="color:var(--accent);"></i><div><div class="lbl">CORREO</div><div style="color:#fff; font-size:14px;">ixenbrandonestiben@gmail.com</div></div></div>
-          <div class="stat-card" style="display: flex; align-items: center; gap:12px;"><i data-lucide="github" style="color: var(--accent);"></i><div><div class="lbl">GITHUB</div><div style="color: #fff; font-size: 14px;">ixenbrandonestiben-lang</div></div></div></div>
-          <div class="stat-card" style="display: flex; align-items: center; gap:12px;"><i data-lucide="linkedin" style="color: var(--accent);"></i><div><div class="lbl">LINKEDIN</div><div style="color: #fff; font-size: 14px;">Brandon Estiben Ixén</div></div></div></div>
+          <a href="https://github.com/ixenbrandonestiben-lang" target="_blank" rel="noopener noreferrer" class="stat-card" style="display: flex; align-items: center; gap:12px;"><i data-lucide="github" style="color: var(--accent);"></i><div><div class="lbl">GITHUB</div><div style="color: #fff; font-size: 14px;">ixenbrandonestiben-lang</div></div></a>
+          <a href="https://www.linkedin.com/in/brandon-estiben-ixén-86ba2b388" target="_blank" rel="noopener noreferrer" class="stat-card" style="display: flex; align-items: center; gap:12px;"><i data-lucide="linkedin" style="color: var(--accent);"></i><div><div class="lbl">LINKEDIN</div><div style="color: #fff; font-size: 14px;">Brandon Estiben Ixén</div></div></a>
         </div>
         <div class="btn-row gs-reveal">
-          <a class="btn btn-primary" href="mailto:tu@correo.com"><span>Enviar Correo</span><i data-lucide="send" style="width:16px;height:16px"></i></a>
+          <a class="btn btn-primary" href="mailto:ixenbrandonestiben@gmail.com"><span>Enviar Correo</span><i data-lucide="send" style="width:16px;height:16px"></i></a>
         </div>
       </div>
     </section>
@@ -323,7 +336,7 @@
     <button aria-label="Cerrar imagen" class="image-modal-close" id="modal-close">
       <i data-lucide="x" style="width:20px;height:20px"></i>
     </button>
-    <div class="image-modal-badge" id="modal-title">Imagen</div>
+    <div class="image-modal-badge" id="image-modal-title">Imagen</div>
     <img id="modal-image" src="" alt="Imagen ampliada" class="image-modal-img"/>
     <div class="image-modal-hint">
       <i data-lucide="mouse-pointer-click" style="width:14px;height:14px"></i>
@@ -345,6 +358,5 @@
   <script src="js/cube.js"></script>
   <script src="js/flipbook.js"></script>
   <script src="js/gravity.js"></script>
-  <script src="js/variables-text.js"></script>
 </body>
 </html>
