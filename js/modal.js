@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const imageModal = document.getElementById('image-modal');
   const modalImg = document.getElementById('modal-image');
-  const modalTitle = document.getElementById('modal-title');
+  const modalTitle = document.getElementById('image-modal-title');
   const modalClose = document.getElementById('modal-close');
 
   // Abrir modal (expuesto globalmente)
